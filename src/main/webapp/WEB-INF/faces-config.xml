@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<faces-config xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-facesconfig_2_2.xsd"
+	version="2.2">
+
+	<navigation-rule>
+        <description>register new user</description>
+        <from-view-id>adduser.xhtml</from-view-id>
+        <navigation-case>
+            <from-action>#{user.add}</from-action>
+            <from-outcome>dashboard</from-outcome>
+            <to-view-id>/dashboard.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-action>#{user.add}</from-action>
+            <from-outcome>adduser</from-outcome>
+            <to-view-id>/adduser.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+    <navigation-rule>
+        <description>Validate user</description>
+        <from-view-id>signin.xhtml</from-view-id>
+        <navigation-case>
+            <from-action>#{userBean.validate}</from-action>
+            <from-outcome>dashboard</from-outcome>
+            <to-view-id>/dashboard.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-action>#{userBean.validate}</from-action>
+            <from-outcome>signin</from-outcome>
+            <to-view-id>/signin.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+    <navigation-rule>
+    	<description>Logout user</description>
+    	<from-view-id>dashboard.xhtml</from-view-id>
+        <navigation-case>
+            <from-action>#{userBean.logout}</from-action>
+            <from-outcome>signin</from-outcome>
+            <to-view-id>/signin.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+    <navigation-rule>
+    	<description>Edit project</description>
+    	<from-view-id>dashboard.xhtml</from-view-id>
+        <navigation-case>
+            <from-action>#{projectBean.editProject()}</from-action>
+            <from-outcome>updateform</from-outcome>
+            <to-view-id>/updateform.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+</faces-config>

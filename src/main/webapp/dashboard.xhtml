@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" xml:lang="en" lang="en">
+	
+    <f:view contentType="text/html;charset=UTF-8" encoding="UTF-8">
+        <h:body styleClass="body">
+	        <h:head>
+				<script src="primefaces:jquery/jquery.js=//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js" ></script>
+				<link rel="stylesheet" href="https://unpkg.com/primeflex@3.1.0/primeflex.css"></link>
+				<style>
+					.ui-tabs{
+						display: flex;
+					}
+					.ui-tabs-left>.ui-tabs-nav {
+						height: initial;
+						padding: 10px;
+						border-right: 1px solid #a8a8a8;
+					}
+					.ui-tabs.ui-tabs-left>.ui-tabs-nav li {
+						border: 1px solid black;
+						border-radius: 2px;
+						margin: 0px;
+						margin-bottom: 5px;
+					}
+					.headerLinks{
+						padding: 5px 10px;
+						border-radius: 5px;
+						text-decoration: none;
+						color: black;
+						border: 1px solid grey;
+					}
+					.headerLinks:hover{
+						background-color: black;
+						color: white;
+					}
+					.capitalized{
+						text-transform: capitalize;
+					}
+				</style>
+			</h:head>
+			
+			<div class="text-center">
+				<p:outputLabel styleClass="capitalized"> Welcome #{loggedInUser.firstName} #{loggedInUser.lastName}</p:outputLabel>
+			</div>
+        	<div class="flex">
+	        	<div class="flex-1 flex align-items-center justify-content-center bg-purple-500 font-bold text-white m-2 px-5 py-3 border-round">
+	        		<p:link outcome="adduser.xhtml" class="headerLinks">
+		            	Add new user
+		            </p:link>
+	        	</div>
+	            <div class="flex-1 flex align-items-center justify-content-center bg-purple-500 font-bold text-white m-2 px-5 py-3 border-round">
+	            	<h:form >
+		            	<h:commandLink value="logout" action="#{userBean.logout}" class="headerLinks" />
+		            </h:form>
+	            </div>
+            </div>
+			
+			<p:dialog header="Assigned To" widgetVar="assignedToDlg"  modal="true" showEffect="explode" value = "#{userBean.projects}" var = "k">     
+				<!-- <h:outputText value="#{k.assignedToUserName}" /> -->
+				<p:pickList id="pickList1" value="#{projectBean.allAssignedTo}" var="userName" itemLabel="#{userName}" itemValue="#{userName}" disabled = "true"/>
+            </p:dialog>
+			<p:tabView orientation="left" style="padding: 0">
+				<p:tab title="Projects">
+					<h2>Project Assigned To You</h2>
+            	
+	            	<div class="card">
+	            		<h:form>
+					        <p:dataTable var="p" value="#{userBean.projects}" id="projectTable">
+					            <p:column headerText="Title">
+					                <h:outputText value="#{p.title}" />
+					            </p:column>
+					
+					            <p:column headerText="Requirements">
+					                <h:outputText value="#{p.requirements}" />
+					            </p:column>
+					
+					            <p:column headerText="Status">
+					                <h:outputText value="#{p.status}" />
+					            </p:column>
+					
+					            <p:column headerText="Assigned To">
+					                <!-- <h:outputText value="#{p.assignedToUserName}" /> -->
+					            	<p:commandButton action="#{projectBean.allAssignedToUsers(p.id)}" update="pickList1" value="Click For More." onclick="PF('assignedToDlg').show();" />      
+					            </p:column>
+								
+					            <p:column headerText="Update">
+					                <h:commandButton action = "#{projectBean.editProject(p.id)}" update="projectTable" value="Update"></h:commandButton> 
+					            </p:column>
+					        </p:dataTable> 
+						</h:form>
+				    </div>
+				</p:tab>
+				<p:tab title="Add New Project"  rendered = "#{loggedInUser.role == 'admin'}">
+					<div class="flex flex-column mt-4">
+						<p:outputLabel rendered="#{loggedInUser.role != 'admin'}">
+							<h3>Sorry, only admin can add new project.</h3>
+						</p:outputLabel>
+			            <h:form id="projectForm" name="projectForm" class="p-4" style="width: fit-content;" rendered = "#{loggedInUser.role == 'admin'}" >
+							<div class="field p-grid mb-2 flex">
+							    <p:outputLabel for="title" class="p-col-fixed" style="width: 50%">
+									<h:outputText value="Enter title"></h:outputText>
+								</p:outputLabel>
+							    <div class="p-col">
+							        <p:inputText id="title" value="#{projectBean.project.title}" type="text" required= "true" requiredMessage="title required"/>
+							    </div>
+							</div>
+							<div class="field p-grid mb-2 flex">
+							    <p:outputLabel for="requirements" class="p-col-fixed" style="width: 50%">
+									<h:outputText value="Enter requirements"></h:outputText>
+								</p:outputLabel>
+							    <div class="p-col">
+							        <p:inputText id="requirements" value="#{projectBean.project.requirements}" type="text" required= "true" requiredMessage="add requirements"/>
+							    </div>
+							</div>
+							<div class="field p-grid mb-2 flex">
+							    <p:outputLabel for="status" class="p-col-fixed" style="width: 50%">
+									<h:outputText value="Enter status"></h:outputText>
+								</p:outputLabel>
+							    <div class="p-col">
+							        <p:inputText id="status" value="#{projectBean.project.status}" type="text" required= "true" requiredMessage="status required"/>
+							    </div>
+							</div>
+							<p:pickList id="pickList" value="#{userBean.dualListUser}" converter = "userConverter" var="user" itemLabel="#{user.userName}" itemValue="#{user}"/>
+							<h:commandButton value="Submit" action="#{projectBean.add}" disabled="#{loggedInUser.role == 'admin' ? 'false': 'true'}"></h:commandButton>
+						</h:form>
+					</div>
+				</p:tab>
+			</p:tabView>
+        </h:body>
+    </f:view>
+
+</html>

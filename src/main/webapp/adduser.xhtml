@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" xml:lang="en" lang="en">
+
+	<link rel="stylesheet" href="https://unpkg.com/primeflex@3.1.0/primeflex.css"></link>
+	
+    <f:view contentType="text/html;charset=UTF-8" encoding="UTF-8">
+        <h:head>
+			
+			<style>
+				.body{
+					color: white;
+					background-image: url(/ProjectManagementSystem/resources/images/bg.jpg);
+				}
+			</style>
+			
+        </h:head>
+        <h:body styleClass="body">
+	        <div class="flex flex-column justify-content-center align-items-center mt-4">
+	        
+	        	<h4 class="m-0" style="color: red">#{alreadyUserError}</h4>
+	            <h:form id="registerForm" class="p-4" style="width: fit-content">
+					<div class="flex flex-column justify-content-center mt-4">
+						<div class="field p-grid mb-2 flex">
+					        <h:outputLabel for="username" style="width: 50%">
+								<h:outputText value="Enter User name"></h:outputText>
+							</h:outputLabel>
+					        <p:inputText id="username" value="#{userBean.user.userName}" required= "true" requiredMessage="User Name required"></p:inputText>
+					    </div>
+					    <h:message for="username" class="mb-1" style="color: red"></h:message>
+					    
+					    <div class="field p-grid mb-2 flex">
+					        <h:outputLabel for="firstname" style="width: 50%">
+								<h:outputText value="Enter first name"></h:outputText>
+							</h:outputLabel>
+					        <p:inputText id="firstname" value="#{userBean.user.firstName}" required= "true" requiredMessage="First Name required"></p:inputText>
+					    </div>
+					    <h:message for="firstname" class="mb-1" style="color: red"></h:message>
+					    
+					    <div class="field p-grid mb-2 flex">
+					        <h:outputLabel for="lastname" style="width: 50%">
+								<h:outputText value="Enter last name"></h:outputText>
+							</h:outputLabel>
+							
+							<p:inputText id="lastname" value="#{userBean.user.lastName }" required= "true" requiredMessage="Last Name required"></p:inputText>
+					    </div>
+					    <h:message for="lastname" class="mb-1" style="color: red"></h:message>
+					    
+					    <div class="field p-grid mb-2 flex">
+					        <h:outputLabel for="age" style="width: 50%">
+								<h:outputText value="Enter age"></h:outputText>
+							</h:outputLabel>
+							
+							<p:inputText id="age" value="#{userBean.user.age }" required= "true" requiredMessage="Age required"></p:inputText>
+					    </div>
+					    <h:message for="age" class="mb-1" style="color: red"></h:message>
+						
+						<div class="field p-grid mb-2 flex">
+					        <h:selectOneRadio id="role" layout="custom" value="#{userBean.user.role }" required= "true" requiredMessage="Please select role">
+							    <f:selectItem itemLabel="Admin" itemValue="admin" />
+							    <f:selectItem itemLabel="Manager" itemValue="manager" />
+							    <f:selectItem itemLabel="Employee" itemValue="employee" />
+							</h:selectOneRadio>
+						</div>
+						<h:message for="role" class="mb-1" style="color: red"></h:message>
+						
+						<div class="field p-grid mb-2 flex">
+					        <h:outputLabel for="password" style="width: 50%">
+								<h:outputText value="Enter Password"></h:outputText>
+							</h:outputLabel>
+					        <p:inputText id="password" value="#{userBean.user.password}" required= "true" requiredMessage="Password required"></p:inputText>
+					    </div>
+					    <h:message for="password" class="mb-1" style="color: red"></h:message>
+					
+					</div>
+					
+					<h:commandButton value="Submit" action="#{userBean.add}"></h:commandButton>
+				</h:form>
+				
+			</div>
+        </h:body>
+    </f:view>
+
+</html>

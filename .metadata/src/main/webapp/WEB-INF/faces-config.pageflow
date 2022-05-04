@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pageflow:Pageflow xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:pageflow="http://www.sybase.com/suade/pageflow" id="pf16497408761120" configfile="/ProjectManagementSystem/src/main/webapp/WEB-INF/faces-config.xml">
+  <nodes xsi:type="pageflow:PFPage" name="adduser.xhtml" comment="register new user" x="338" y="1330" id="pf16497557617770" referenceLink="//@navigationRule.0/@navigationCase.1/@toViewId|" inlinks="pf16499440566850" path="/adduser.xhtml"/>
+  <nodes xsi:type="pageflow:PFPage" name="dashboard.xhtml" comment="Logout user" x="122" y="370" id="pf16497557617773" referenceLink="//@navigationRule.3/@fromViewId|" outlinks="pf16504420609850 pf16504420609851" path="dashboard.xhtml"/>
+  <nodes xsi:type="pageflow:PFPage" name="adduser.xhtml" comment="register new user" x="122" y="1138" id="pf16497557617774" referenceLink="//@navigationRule.0/@fromViewId|" outlinks="pf16499440566850 pf16503485142200" path="adduser.xhtml"/>
+  <nodes xsi:type="pageflow:PFPage" name="dashboard.xhtml" x="338" y="946" id="pf16503485142201" referenceLink="//@navigationRule.1/@navigationCase.0/@toViewId|" inlinks="pf16503485142200 pf16503614116897" path="/dashboard.xhtml"/>
+  <nodes xsi:type="pageflow:PFPage" name=".xhtml" comment="Validate user" x="122" y="754" id="pf16503568419392" referenceLink="//@navigationRule.1/@fromViewId|" outlinks="pf16503568419394 pf16503614116897" path="signin.xhtml"/>
+  <nodes xsi:type="pageflow:PFPage" name="signin.xhtml" x="338" y="562" id="pf16503568419396" referenceLink="//@navigationRule.2/@navigationCase.0/@toViewId|" inlinks="pf16503568419394 pf16504420609850" path="/signin.xhtml"/>
+  <nodes xsi:type="pageflow:PFPage" name="updateform.xhtml" x="338" y="178" id="pf16504420609852" referenceLink="//@navigationRule.3/@navigationCase.0/@toViewId|" inlinks="pf16504420609851" path="/updateform.xhtml"/>
+  <links id="pf16499440566850" target="pf16497557617770" source="pf16497557617774" outcome="adduser" fromaction="#{user.add}"/>
+  <links id="pf16503485142200" target="pf16503485142201" source="pf16497557617774" outcome="dashboard" fromaction="#{user.add}"/>
+  <links id="pf16503568419394" target="pf16503568419396" source="pf16503568419392" outcome="signin" fromaction="#{userBean.validate}"/>
+  <links id="pf16503614116897" target="pf16503485142201" source="pf16503568419392" outcome="dashboard" fromaction="#{userBean.validate}"/>
+  <links id="pf16504420609850" target="pf16503568419396" source="pf16497557617773" outcome="signin" fromaction="#{userBean.logout}"/>
+  <links id="pf16504420609851" target="pf16504420609852" source="pf16497557617773" outcome="updateform" fromaction="#{projectBean.editProject()}"/>
+</pageflow:Pageflow>

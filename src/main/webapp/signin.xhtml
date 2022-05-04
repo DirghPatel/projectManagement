@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" xml:lang="en" lang="en">
+      
+      <link rel="stylesheet" href="https://unpkg.com/primeflex@3.1.0/primeflex.css"></link>
+
+    <f:view contentType="text/html;charset=UTF-8" encoding="UTF-8">
+        <h:head>
+
+        </h:head>
+        <h:body>
+        <div class="flex flex-column justify-content-center align-items-center mt-4">
+        	<h:form id="loginForm" class="p-4 border-1">
+            <!-- <div class="ui-fluid p-formgrid p-grid"> -->
+            	<p:growl id="growl" showDetail="true" />
+				<div class="field p-grid mb-2 flex">
+			        <p:outputLabel for="username" class="p-col-fixed" style="width: 50%">
+						<h:outputText value="Enter User name"></h:outputText>
+					</p:outputLabel>
+					<div class="p-col">
+			        	<h:inputText id="username" value="#{userBean.user.userName}" required= "true" requiredMessage="User Name required"></h:inputText>
+			        </div>
+			    </div>
+			    <div class="field p-grid mb-2 flex">
+			        <p:outputLabel for="password" class="p-col-fixed" style="width: 50%">
+						<h:outputText value="Enter password"></h:outputText>
+					</p:outputLabel>
+					<div class="p-col">
+			        	<h:inputSecret id="password" value="#{userBean.user.password}" required= "true" requiredMessage="password required"></h:inputSecret>
+			        </div>
+			    </div>
+			
+			    <h:commandButton value="Submit" action="#{userBean.validate}" update="growl"></h:commandButton>
+			<!-- </div> -->
+			</h:form>
+		</div>
+        </h:body>
+    </f:view>
+
+</html>
