@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -27,8 +28,8 @@ public class Project {
 	
 	@ManyToMany(fetch=FetchType.EAGER)
 	@JoinTable(name = "USER_PROJECT" , 
-				joinColumns = {@JoinColumn(name = "project_id")},
-				inverseJoinColumns = {@JoinColumn(name = "user_userId")})
+				joinColumns = {@JoinColumn(name = "project_id" , referencedColumnName = "id")},
+				inverseJoinColumns = {@JoinColumn(name = "user_uid" , referencedColumnName = "uid")})
 	private List<User> assignedTo;
 	
 	@Transient
@@ -78,10 +79,5 @@ public class Project {
 	public void setAssignedToUserName(List<String> assignedToUserName) {
 		this.assignedToUserName = assignedToUserName;
 	}
-
-	
-	
-	
-	
 
 }

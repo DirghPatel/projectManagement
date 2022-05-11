@@ -9,6 +9,77 @@
 	<link rel="stylesheet" href="https://unpkg.com/primeflex@3.1.0/primeflex.css"></link>
     <f:view contentType="text/html;charset=UTF-8" encoding="UTF-8">
         <h:head>
+        
+        	<style>
+        		body{
+        			background-color: #ffe1e1;
+        		}
+        		#projectForm{
+        			background-color: #33453e;
+        			color: white;
+        			border-radius: 20px;
+        			box-shadow: 0px 0px 5px 0px #33453e;
+        		}
+        		.ui-picklist-list-wrapper{
+					border: 1px solid #4f4f4f;
+				}
+				.ui-picklist-list{
+					border: none !important;
+				}
+				.ui-state-highlight{
+					color: black !important;
+					text-shadow: none !important;
+					background: #e1d3ff !important;
+				}
+				.ui-picklist-list .ui-state-hover{
+					background: #f6baa8 !important;
+					color: black !important;
+					box-shadow: none !important;
+				}
+				.ui-picklist .ui-picklist-list li{
+					padding: 5px;
+				}
+				.ui-picklist-buttons-cell .ui-button{
+					background: #e4ddf3 !important;
+					border: 1px solid black;
+				}
+				.ui-picklist-buttons-cell .ui-state-disabled{
+					background: transparent !important;
+				}
+				.inputField{
+					border: 1px solid #4f4f4f !important;
+					box-shadow: none !important;
+					background: white !important;
+					color: black !important;
+				}
+				.submitBtn{
+					background-color: #c5e7da;
+					border: 1px solid #c5e7da;
+					border-radius: 30px;
+					cursor: pointer;
+					font-weight: bold;
+				}
+				.submitBtn:hover{
+					background-color: #e4ddf3;
+					color: black !important;
+				}
+				.ui-state-error{
+					background: none ;
+					color: white ;
+				}
+				.ui-growl-item{
+					padding: 20px 10px; 
+				}
+				.ui-growl-title{
+					padding: 0;
+				}
+			 	.ui-growl-item .ui-growl-message{
+			 		width: 225px !important;
+			 		padding: 0;
+			 		padding-top: 5px;	
+			 	}
+			 	
+        	</style>
 
         </h:head>
         <h:body>
@@ -16,48 +87,40 @@
         	<h1 class="text-center">Update Project Details</h1>
             
             <div class="flex flex-column justify-content-center align-items-center mt-4">
-	            <h:form id="projectForm" class="px-6 py-4 border-1" style="width: fit-content;">
-					<div class="field p-grid mb-2 flex flex-column justify-content-center">
+	            <h:form id="projectForm" class="px-6 py-4" style="width: fit-content;">
+					<div class="field p-grid mt-2 mb-0 flex justify-content-between">
 					    <p:outputLabel for="title" class="p-col-fixed" style="width: fit-content">
 							<h:outputText value="Enter title"></h:outputText>
 						</p:outputLabel>
 					    <div class="p-col">
-					        <p:inputText id="title" value="#{editProject.title}" type="text" required= "true" requiredMessage="title required"/>
+					        <p:inputText class="inputField" id="title" value="#{editProject.title}" type="text" required= "true" requiredMessage="Please enter title"/>
 					    </div>
 					</div>
-					<div class="field p-grid mb-2">
+					<div class="field p-grid mt-2 mb-0 flex justify-content-between">
 					    <p:outputLabel for="requirements" class="p-col-fixed" style="width: fit-content">
 							<h:outputText value="Enter requirements"></h:outputText>
 						</p:outputLabel>
 					    <div class="p-col">
-					        <p:inputText id="requirements" value="#{editProject.requirements}" type="text" required= "true" requiredMessage="add requirements"/>
+					        <p:inputText class="inputField" id="requirements" value="#{editProject.requirements}" type="text" required= "true" requiredMessage="Please enter requirements"/>
 					    </div>
 					</div>
-					<div class="field p-grid mb-2">
+					<div class="field p-grid mt-2 mb-0 flex justify-content-between">
 					    <p:outputLabel for="status" class="p-col-fixed" style="width: fit-content">
 							<h:outputText value="Enter status"></h:outputText>
 						</p:outputLabel>
 					    <div class="p-col">
-					        <p:inputText id="status" value="#{editProject.status}" type="text" required= "true" requiredMessage="status required"/>
+					        <p:inputText class="inputField" id="status" value="#{editProject.status}" type="text" required= "true" requiredMessage="Please enter status"/>
 					    </div>
 					</div>
-					<div class="field p-grid mb-2">
-						<!-- <p:outputLabel for="assignedTo" class="p-col-fixed" style="width: fit-content">
-							<h:outputText value="Assigned To:"></h:outputText>
-						</p:outputLabel>
-						<div class="p-col">
-							<p:selectManyMenu value="#{editProject.assignedTo}" required= "true" id="assignedTo" requiredMessage="Please select user">
-								<f:selectItems value="#{userBean.allUserObj}" />
-							</p:selectManyMenu>
-						</div> -->
-						
-						<p:pickList id="pickList" value="#{projectBean.dualListUser}" converter = "userConverter" var="user" itemLabel="#{user.userName}" itemValue="#{user}"/>
-						
+					<div class="field p-grid mt-2">
+						<p:pickList id="pickList" value="#{projectBean.dualListUser}" rendered="#{loggedInUser.role == 'admin'}" converter = "userConverter" var="user" itemLabel="#{user.userName}" itemValue="#{user}"/>
 					</div>
-					<h:commandButton value="Submit" update=":ProjectTable" action="#{projectBean.updateProject(editProject)}"></h:commandButton>
+					<h:commandButton class="submitBtn mt-3 px-4 py-2 text-black" value="Submit" update=":ProjectTable" action="#{projectBean.updateProject(editProject)}"></h:commandButton>
 				</h:form>
 			</div>
+			<p:growl id="message"></p:growl>
         </h:body>
     </f:view>
+    
 
 </html>

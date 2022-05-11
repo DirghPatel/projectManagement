@@ -14,7 +14,9 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.RequestScoped;
 import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.naming.Context;
@@ -29,7 +31,7 @@ import com.tatvasoft.facade.ProjectFacade;
 import com.tatvasoft.facade.UserFacade;
 
 @ManagedBean
-@SessionScoped
+@RequestScoped
 public class ProjectBean {
 
 	private Project project;
@@ -98,28 +100,20 @@ public class ProjectBean {
 	
 	public String editProject(int id) {
 		Project p =projectFacade.getProjectById(id);
-		
-//		DualListModel<User> dualListU = new DualListModel<User>();
-//		List<User> assignedUserSource = userFacade.getAllUsernames();
-//		List<User> users = userFacade.getAllUsernames();
 		List<User> assignedUserSource = new ArrayList<User>();
 		List<User> assignedUserTarget = p.getAssignedTo();
 
 		for(User i: userFacade.getAllUsernames()) {
-			System.out.println(assignedUserTarget.contains(i));
 			if(!assignedUserTarget.contains(i)) {
 				assignedUserSource.add(i);
 			}
 		}
 		dualListUser = new DualListModel<User>(assignedUserSource , assignedUserTarget);
-//		sessionMap.put("assignedUserPickList", dualListUser);
 		sessionMap.put("editProject", p);
         return "updateform?faces-redirect=true";
 	}
 	public void allAssignedToUsers(int id) {
 		Project p =projectFacade.getProjectById(id);
-//		List<User> users = userFacade.getAllUsernames();
-//		List<User> assignedUserAll = p.getAssignedTo();
 		List<String> assignedUserSource = new ArrayList<String>();
 		List<String> assignedUserTarget = new ArrayList<String>();
 		for(User i: p.getAssignedTo()) {
@@ -131,15 +125,25 @@ public class ProjectBean {
 			}
 		}
 		allAssignedTo = new DualListModel<String>(assignedUserSource , assignedUserTarget);
+		System.out.println("all assigned to user called");
 	}
 	
 	public String updateProject(Project p) {
-		System.out.println(dualListUser.getTarget());
 		p.setAssignedTo(dualListUser.getTarget());
 		projectFacade.updateProject(p);
 		return "dashboard?faces-redirect=true";
     }
 	
-	
+	public String deleteProject(int projectId) {
+		projectFacade.deleteUserProject(projectId);
+		Project project = projectFacade.getProjectById(projectId);
+		project.setStatus("deleted");
+		projectFacade.updateProject(project);
+//		projectFacade.hardDeleteProject(projectId);
+		FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Project Successfully Deleted!!", "Deleted Successfully");
+		FacesContext.getCurrentInstance().addMessage(null, message);
+		System.out.println("del");
+		return "dashboard?faces-redirect=true";
+	}
 }
 

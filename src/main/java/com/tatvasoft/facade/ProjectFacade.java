@@ -8,6 +8,8 @@ import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 
 import com.tatvasoft.entities.Project;
+import com.tatvasoft.entities.UserProject;
+import com.tatvasoft.entities.UserProjectId;
 
 @Stateless
 public class ProjectFacade {
@@ -32,12 +34,19 @@ public class ProjectFacade {
 		return projects;
 	}
 	
-	public List<Project> getAllProjects(String userName){
+	public List<Project> getAllProjects(int id){
 		List<Project> projects = entityManager.createQuery("from Project p where p.assignedTo = ?1" , Project.class)
-				.setParameter(1, userName)
+				.setParameter(1, id)
 				.getResultList();
 		
 		return projects;
+	}
+	
+	public List<UserProject> getAllProjectsId(int userId){
+		
+		return entityManager.createQuery("from UserProject where user_uid = ?1" , UserProject.class)
+				.setParameter(1, userId)
+				.getResultList();
 	}
 	
 	public Project getProjectById(int id) {
@@ -46,6 +55,30 @@ public class ProjectFacade {
 				.getResultList();
 		
 		return project.get(0);
+	}
+	
+	@Transactional(rollbackOn = Exception.class)
+	public void deleteUserProject(int projectId) {
+		try {
+			entityManager.createQuery("delete UserProject where project_id = ?1")
+				.setParameter(1, projectId)
+				.executeUpdate();
+		}
+		catch(Exception e) {
+			throw e;
+		}
+	}
+	
+	@Transactional(rollbackOn = Exception.class)
+	public void hardDeleteProject(int projectId) {
+		try {
+			entityManager.createQuery("delete Project where id = ?1")
+				.setParameter(1, projectId)
+				.executeUpdate();
+		}
+		catch(Exception e) {
+			throw e;
+		}
 	}
 	
 }

@@ -5,37 +5,71 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:p="http://primefaces.org/ui" xml:lang="en" lang="en">
       
-      <link rel="stylesheet" href="https://unpkg.com/primeflex@3.1.0/primeflex.css"></link>
+    <link rel="stylesheet" href="https://unpkg.com/primeflex@3.1.0/primeflex.css"></link>
 
     <f:view contentType="text/html;charset=UTF-8" encoding="UTF-8">
         <h:head>
-
+			<style>
+				
+				.ui-inputfield , .ui-inputfield.ui-state-focus{
+					box-shadow: none;
+				}
+				
+				body{
+					background-color: #717775;
+					margin: 0px;
+				}
+				.width-100{
+					width: 100%;
+				}
+				.main-container{
+					box-shadow: 0px 0px 30px 0px rgba(0,0,0,0.69);
+					border-radius: 20px;
+					overflow: hidden;
+				}
+				.submit-btn{
+					background-color: #696969;
+					border: 1px solid #696969;
+					border-radius: 30px;
+					cursor: pointer;
+					font-weight: bold;
+				}
+				.submit-btn:hover{
+					background-color: #a4ede6;
+					color: black !important;
+				}
+				.label{
+					font-weight: bold;
+				}
+				.outer-container{
+					height: 100vh;
+				}
+			</style>
         </h:head>
         <h:body>
-        <div class="flex flex-column justify-content-center align-items-center mt-4">
-        	<h:form id="loginForm" class="p-4 border-1">
-            <!-- <div class="ui-fluid p-formgrid p-grid"> -->
-            	<p:growl id="growl" showDetail="true" />
-				<div class="field p-grid mb-2 flex">
-			        <p:outputLabel for="username" class="p-col-fixed" style="width: 50%">
-						<h:outputText value="Enter User name"></h:outputText>
-					</p:outputLabel>
-					<div class="p-col">
-			        	<h:inputText id="username" value="#{userBean.user.userName}" required= "true" requiredMessage="User Name required"></h:inputText>
-			        </div>
-			    </div>
-			    <div class="field p-grid mb-2 flex">
-			        <p:outputLabel for="password" class="p-col-fixed" style="width: 50%">
-						<h:outputText value="Enter password"></h:outputText>
-					</p:outputLabel>
-					<div class="p-col">
-			        	<h:inputSecret id="password" value="#{userBean.user.password}" required= "true" requiredMessage="password required"></h:inputSecret>
-			        </div>
-			    </div>
-			
-			    <h:commandButton value="Submit" action="#{userBean.validate}" update="growl"></h:commandButton>
-			<!-- </div> -->
-			</h:form>
+        <div class="flex flex-column justify-content-center align-items-center outer-container">
+        
+        	<!-- <h1 class="mb-1"> Project Management System</h1> -->  	
+        	<div class="flex flex-column justify-content-center align-items-center main-container">
+	        	<h:graphicImage url="/resources/images/pms.webp" height="300" width="600"></h:graphicImage>
+	        	<div class="width-100 bg-white">
+	        	<h:form id="loginForm" class="p-4 w-100">
+	            	<p:growl id="growl" showDetail="true" />
+				    <div class="ui-fluid">
+					    <div class="field">
+					        <label for="username" class="label">Username</label>
+					        <p:inputText class="p-2" id="username" value="#{userBean.user.userName}" required= "true" requiredMessage="User Name required" type="text" />
+					    </div>
+					    <div class="field">
+					        <label for="lastname" class="label">Lastname</label>
+					        <p:inputText class="p-2" id="password" value="#{userBean.user.password}" required= "true" requiredMessage="password required" type="password" />
+					    </div>
+					</div>
+				
+				    <h:commandButton value="Submit" action="#{userBean.validate}" update="growl" styleClass="submit-btn px-5 py-3 text-white "></h:commandButton>
+				</h:form>
+				</div>
+			</div>
 		</div>
         </h:body>
     </f:view>

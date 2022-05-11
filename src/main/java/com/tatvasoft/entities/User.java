@@ -23,7 +23,7 @@ import javax.persistence.UniqueConstraint;
 public class User {
 
 	@Id
-	@Column(name = "userId")
+	@Column(name = "uid")
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int userId;
 	
@@ -46,6 +46,7 @@ public class User {
 	private String password;
 	
 	@ManyToMany(mappedBy = "assignedTo")
+//	@OneToMany(mappedBy = "primaryKey.user ")
 	private List<Project> assignedProjects;
 	
 	public List<Project> getAssignedProjects() {
@@ -148,6 +149,10 @@ public class User {
 		return true;
 	}
 	
+	public void removeProject(Project project) {
+		this.assignedProjects.remove(project);
+		project.getAssignedTo().remove(this);
+	}
 	
 	
 }

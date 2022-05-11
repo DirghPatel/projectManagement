@@ -1,6 +1,7 @@
 package com.tatvasoft.beans;
 
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -15,6 +16,8 @@ import org.primefaces.model.DualListModel;
 
 import com.tatvasoft.entities.Project;
 import com.tatvasoft.entities.User;
+import com.tatvasoft.entities.UserProject;
+import com.tatvasoft.entities.UserProjectId;
 import com.tatvasoft.facade.ProjectFacade;
 import com.tatvasoft.facade.UserFacade;
 
@@ -30,7 +33,7 @@ public class UserBean {
 
 	private User user;
 	private List<String> allUsers = new ArrayList<String>();
-	private List<Project> projects ;
+	private List<Project> projects = new ArrayList<Project>() ;
 	private List<User> allUserObj = new ArrayList<User>();
 	private DualListModel<User> dualListUser = new DualListModel<User>();
 
@@ -61,6 +64,10 @@ public class UserBean {
 			allUsers.add(u.getUserName());
 		});
 		
+		user = new User();
+		FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("alreadyUserError");
+		
+		
 		allUserObj = userFacade.getAllUsernames();
 		
 		User u = (User) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("loggedInUser");
@@ -69,15 +76,16 @@ public class UserBean {
 				projects = projectFacade.getAllProjects();
 			}
 			else {
-				projects = projectFacade.getAllProjects(u.getUserName());
+				List<UserProject> up = projectFacade.getAllProjectsId(u.getUserId());
+				for(UserProject i: up) {
+					projects.add(projectFacade.getProjectById(i.getId().getProject().getId()));
+				}
 			}
 		}
 		else {
 			projects = new ArrayList<Project>();
 		}
 		
-		user = new User();
-		FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("alreadyUserError");
 		
 		for(Project p: projects) {
 			List<String> ls = new ArrayList<String>();
@@ -90,11 +98,16 @@ public class UserBean {
 		List<User> userSource = userFacade.getAllUsernames();
 		List<User> userTarget = new ArrayList<User>();
 		setDualListUser(new DualListModel<User>(userSource , userTarget));
+		
+		System.out.println(projects);
+		System.out.println("-------------------------");
+		
 	}
 	
 	
 	public String add() {
 		
+		user.setPassword(encryptPassword(user.getPassword()));
 		String val = userFacade.addNewUser(user);
 		
 		if(val == null) {
@@ -107,31 +120,15 @@ public class UserBean {
     }
 
 	public String validate() {
-
-//        List<User> users = userFacade.getUser(user.getUserName(), user.getPassword());
-//        if(users.size() != 0) {
-//        if(!users.isEmpty()) {
-//        	FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("loggedInUser", users.get(0));
-//        	return "dashboard?faces-redirect=true";
-//        }
-//        else {
-//        	FacesContext context = FacesContext.getCurrentInstance();
-//        	FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "failed", "Authentication failed");
-//            context.addMessage(null, message);
-//            System.out.println("00000000");
-//        	return "signin?faces-redirect=true";
-//        }
-		
 		try {
-			User u = userFacade.getUser(user.getUserName(), user.getPassword());
+			User u = userFacade.getUser(user.getUserName(), encryptPassword(user.getPassword()));
 			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("loggedInUser", u);
         	return "dashboard?faces-redirect=true";
 		}
 		catch(Exception e) {
 			FacesContext context = FacesContext.getCurrentInstance();
         	FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "failed", "Authentication failed");
-            context.addMessage(null, message);
-            System.out.println(context.getMessageList() + " " + e);
+            context.addMessage("message", message);
             return "signin?faces-redirect=true";
 		}
 		
@@ -153,6 +150,11 @@ public class UserBean {
 	}
 	public void setDualListUser(DualListModel<User> dualListUser) {
 		this.dualListUser = dualListUser;
+	}
+	
+	public String encryptPassword(String password) {
+		String BasicBase64fromat = Base64.getEncoder().encodeToString(password.getBytes());
+		return BasicBase64fromat;
 	}
 	
 }

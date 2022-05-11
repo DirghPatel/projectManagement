@@ -71,7 +71,7 @@
 					        <h:outputLabel for="password" style="width: 50%">
 								<h:outputText value="Enter Password"></h:outputText>
 							</h:outputLabel>
-					        <p:inputText id="password" value="#{userBean.user.password}" required= "true" requiredMessage="Password required"></p:inputText>
+					        <h:inputSecret id="password" value="#{userBean.user.password}" required= "true" requiredMessage="Password required"></h:inputSecret>
 					    </div>
 					    <h:message for="password" class="mb-1" style="color: red"></h:message>
 					

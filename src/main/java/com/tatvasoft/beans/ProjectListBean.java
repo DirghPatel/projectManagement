@@ -49,7 +49,7 @@ public class ProjectListBean {
 			projects = projectFacade.getAllProjects();
 		}
 		else {
-			projects = projectFacade.getAllProjects(u.getUserName());
+			projects = projectFacade.getAllProjects(u.getUserId());
 		}
 	}	
 }

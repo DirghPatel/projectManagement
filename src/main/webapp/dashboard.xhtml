@@ -3,132 +3,333 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
 	xmlns:p="http://primefaces.org/ui" xml:lang="en" lang="en">
 	
     <f:view contentType="text/html;charset=UTF-8" encoding="UTF-8">
-        <h:body styleClass="body">
-	        <h:head>
-				<script src="primefaces:jquery/jquery.js=//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js" ></script>
-				<link rel="stylesheet" href="https://unpkg.com/primeflex@3.1.0/primeflex.css"></link>
-				<style>
-					.ui-tabs{
-						display: flex;
-					}
-					.ui-tabs-left>.ui-tabs-nav {
-						height: initial;
-						padding: 10px;
-						border-right: 1px solid #a8a8a8;
-					}
-					.ui-tabs.ui-tabs-left>.ui-tabs-nav li {
-						border: 1px solid black;
-						border-radius: 2px;
-						margin: 0px;
-						margin-bottom: 5px;
-					}
-					.headerLinks{
-						padding: 5px 10px;
-						border-radius: 5px;
-						text-decoration: none;
-						color: black;
-						border: 1px solid grey;
-					}
-					.headerLinks:hover{
-						background-color: black;
-						color: white;
-					}
-					.capitalized{
-						text-transform: capitalize;
-					}
-				</style>
-			</h:head>
-			
-			<div class="text-center">
-				<p:outputLabel styleClass="capitalized"> Welcome #{loggedInUser.firstName} #{loggedInUser.lastName}</p:outputLabel>
+        
+        <h:head>
+			<script src="primefaces:jquery/jquery.js=//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js" ></script>
+			<link rel="stylesheet" href="https://unpkg.com/primeflex@3.1.0/primeflex.css"></link>
+			<style>
+				.ui-tabs{
+					display: flex;
+				}
+				.ui-widget-header{
+					background: none;	
+				}
+				
+				.ui-tabs-left>.ui-tabs-nav {
+					height: initial;
+					padding: 10px;
+				}
+				.ui-tabs.ui-tabs-left>.ui-tabs-nav li {
+					border: none;
+					border-radius: 2px;
+					margin: 0px;
+					margin-bottom: 3px;
+					background: #e4ddf3;
+				}
+				.ui-tabs .ui-tabs-nav{
+					background: none;
+					padding-top: 30px;
+				}
+				.headerLinkContainer{
+					background-color : #943d24;
+				}
+				.headerLinks{
+					padding: 5px 10px;
+					border-radius: 5px;
+					text-decoration: none;
+					font-family: sans-sarif;	
+					font-size: 20px;
+					font-weight: 400;
+					/* color: #c5fad6; */
+					color: #e4ddf3;
+				}
+				.headerLinks:hover{
+					color: #092834;
+					
+				}
+				.capitalized{
+					text-transform: capitalize;
+				}
+				.header{
+					background-color : #e4ddf4;
+					padding: 10px 20px;
+					color: #453438;
+					font-weight: bolder;
+					font-size: 35px;
+					font-family: fantasy;
+				}
+				body{
+					margin: 0;
+					background-color: #fffbf0;
+				}
+				.navTabMain{
+					background: none !important;
+					background-color: blue;
+					border: none;
+				}
+				.ui-tabs .ui-tabs-nav .ui-tabs-selected{
+					background: #f6baa8 !important;
+				}
+				.ui-tabs-header:before{
+					content: '';
+			        display: block;
+			        border-top: 8px solid transparent;
+			        border-left: 10px solid #f6baa8;
+			        border-bottom: 8px solid transparent;
+			        position: absolute;
+			        top: 50%;
+			        right: -10px;
+			        transform: translateY(-50%);
+			        opacity: 0;
+				}
+				.ui-tabs-selected:before{
+					opacity: 1;
+				}
+				.ui-tabs .ui-tabs-nav li a{
+					padding: 10px 20px;
+				}
+				.dataTable{
+					width: 100%;
+					border-spacing: 0;
+					border: 1px solid #36304a;
+				}
+				.tableHeader{
+					background-color: #36304a;
+					border: none;
+					padding: 10px 2px;
+					color: white;
+					height: 50px;
+				}
+				.tableOddRow , .tableEvenRow{
+					height: 50px;
+				}
+				.tableOddRow{
+					background-color: white;
+				}
+				.tableEvenRow{
+					background-color: #f5f5f5;
+				}
+				.tableOddRow td{
+					text-align: center;
+					max-width: 180px !important;
+				}
+				.tableEvenRow td{
+					text-align: center;
+					max-width: 180px !important;
+				}
+				.tableBtn{
+					border: 1px solid black !important;
+					background-color: transparent !important;
+					border-radius: 4px !important;
+					font-weight: 100 !important;
+					padding: 6px !important;
+					color: #4f4f4f;
+					cursor: pointer;
+					text-shadow: none !important;
+				}
+				.assignedToBtn .ui-button-text , .deleteBtn .ui-button-text , .updateBtn .ui-button-text{
+					padding: 0px;
+				}
+				.assignedToBtn:hover{
+					background: #5b0055 !important;
+					border: 1px solid #5b0055 !important;
+					color: white;
+				}
+				.deleteBtn:hover{
+					background: #ff3b3b !important;
+					border: 1px solid #ff3b3b !important;
+					color: white;
+				}
+				.updateBtn:hover{
+					background: #00807d !important;
+					border: 1px solid #00807d !important;
+					color: white;
+				}
+				.inputFieldANP{
+					border: 1px solid #4f4f4f !important;
+					box-shadow: none !important;
+				}
+				.ui-picklist-list-wrapper{
+					border: 1px solid #4f4f4f;
+				}
+				.ui-picklist-list{
+					border: none !important;
+				}
+				.ui-state-highlight{
+					color: black !important;
+					text-shadow: none !important;
+					background: #e1d3ff !important;
+				}
+				.ui-picklist-list .ui-state-hover{
+					background: #f6baa8 !important;
+					color: black !important;
+					box-shadow: none !important;
+				}
+				.ui-picklist .ui-picklist-list li{
+					padding: 5px;
+				}
+				.ui-picklist-buttons-cell .ui-button{
+					background: #e4ddf3 !important;
+					border: 1px solid black;
+				}
+				.ui-picklist-buttons-cell .ui-state-disabled{
+					background: transparent !important;
+				}
+				.ui-state-error{
+					background: none !important;
+					color: initial !important;
+				}
+				.submit-btn{
+					background-color: #696969;
+					border: 1px solid #696969;
+					border-radius: 30px;
+					cursor: pointer;
+					font-weight: bold;
+				}
+				.submit-btn:hover{
+					background-color: #e4ddf3;
+					color: black !important;
+				}
+				.ui-growl-item{
+					padding: 20px 10px; 
+				}
+				.ui-growl-title{
+					padding: 0;
+				}
+			 	.ui-growl-item .ui-growl-message{
+			 		width: 225px !important;
+			 		padding: 0;
+			 		padding-top: 5px;	
+			 	}
+			</style>
+		</h:head>
+		<h:body styleClass="body">
+			<div class="text-center header">
+				<!-- <p:outputLabel styleClass="capitalized"> Welcome #{loggedInUser.firstName} #{loggedInUser.lastName}</p:outputLabel> -->
+					<p class="capitalized m-0">Welcome #{loggedInUser.firstName} #{loggedInUser.lastName}</p>
 			</div>
-        	<div class="flex">
-	        	<div class="flex-1 flex align-items-center justify-content-center bg-purple-500 font-bold text-white m-2 px-5 py-3 border-round">
+			<div class="flex headerLinkContainer">
+	        	<div class="flex-1 flex align-items-center justify-content-center bg-purple-500 font-bold text-white mx-2 px-4 py-2 border-round">
+	        	
+	        	<c:if test="#{loggedInUser.role == 'admin'}">
 	        		<p:link outcome="adduser.xhtml" class="headerLinks">
-		            	Add new user
+		            	ADD NEW USER
 		            </p:link>
+	        	</c:if>
+	        	<c:if test="#{loggedInUser.role != 'admin'}">
+	        		<p:link outcome="adduser.xhtml" class="headerLinks" disabled="true">
+		            	ADD NEW USER
+		            </p:link>
+		        </c:if>
 	        	</div>
-	            <div class="flex-1 flex align-items-center justify-content-center bg-purple-500 font-bold text-white m-2 px-5 py-3 border-round">
+	            <div class="flex-1 flex align-items-center justify-content-center bg-purple-500 font-bold text-white mx-2 px-4 py-2 border-round">
 	            	<h:form >
-		            	<h:commandLink value="logout" action="#{userBean.logout}" class="headerLinks" />
+		            	<h:commandLink value="LOGOUT" action="#{userBean.logout}" class="headerLinks" />
 		            </h:form>
 	            </div>
             </div>
 			
-			<p:dialog header="Assigned To" widgetVar="assignedToDlg"  modal="true" showEffect="explode" value = "#{userBean.projects}" var = "k">     
-				<!-- <h:outputText value="#{k.assignedToUserName}" /> -->
+			<p:dialog header="Assigned To" widgetVar="assignedToDlg"  modal="true" showEffect="explode" >     
 				<p:pickList id="pickList1" value="#{projectBean.allAssignedTo}" var="userName" itemLabel="#{userName}" itemValue="#{userName}" disabled = "true"/>
             </p:dialog>
-			<p:tabView orientation="left" style="padding: 0">
-				<p:tab title="Projects">
+            
+            
+			<p:tabView orientation="left" style="padding: 0" class="navTabMain mt-4" id="tabs">
+				<p:tab title="Projects" class="firstTab">
 					<h2>Project Assigned To You</h2>
             	
 	            	<div class="card">
-	            		<h:form>
-					        <p:dataTable var="p" value="#{userBean.projects}" id="projectTable">
-					            <p:column headerText="Title">
-					                <h:outputText value="#{p.title}" />
-					            </p:column>
-					
-					            <p:column headerText="Requirements">
-					                <h:outputText value="#{p.requirements}" />
-					            </p:column>
-					
-					            <p:column headerText="Status">
-					                <h:outputText value="#{p.status}" />
-					            </p:column>
-					
-					            <p:column headerText="Assigned To">
-					                <!-- <h:outputText value="#{p.assignedToUserName}" /> -->
-					            	<p:commandButton action="#{projectBean.allAssignedToUsers(p.id)}" update="pickList1" value="Click For More." onclick="PF('assignedToDlg').show();" />      
-					            </p:column>
-								
-					            <p:column headerText="Update">
-					                <h:commandButton action = "#{projectBean.editProject(p.id)}" update="projectTable" value="Update"></h:commandButton> 
-					            </p:column>
-					        </p:dataTable> 
+	            		<h:form id="mainForm"> 
+	            			<h:dataTable value = "#{userBean.projects}" var = "p" id="projectTable"
+							   styleClass = "dataTable"
+							   headerClass = "tableHeader"
+							   rowClasses = "tableOddRow,tableEvenRow">
+							   
+								<h:column>    				
+							    	<f:facet name = "header">Title</f:facet>    				
+							    	#{p.title}
+							   	</h:column>
+							   
+							   	<h:column>
+							      	<f:facet name = "header">Requirements</f:facet>
+							      	#{p.requirements}
+							   	</h:column>
+							   
+							   	<h:column>
+							      	<f:facet name = "header">Status</f:facet>
+							      	#{p.status}
+							   	</h:column>
+							   
+							   	<h:column>
+							      	<f:facet name = "header">Assigned To</f:facet>
+							      	<p:commandButton styleClass="tableBtn assignedToBtn" action="#{projectBean.allAssignedToUsers(p.id)}" update="pickList1" value="Click here" onclick="PF('assignedToDlg').show();" ></p:commandButton>
+								</h:column>
+							   
+							   	<h:column>
+							      	<f:facet name = "header">Update</f:facet>
+							      	<p:commandButton styleClass="tableBtn updateBtn" action = "#{projectBean.editProject(p.id)}" update="projectTable" value="Update"></p:commandButton>
+							   	</h:column>
+							  
+								<h:column>
+									<f:facet name = "header">Delete</f:facet>
+									<h:commandButton styleClass="tableBtn deleteBtn"
+														rendered="#{loggedInUser.role == 'admin'}" 
+														action="#{projectBean.deleteProject(p.id)}" 
+														value="Delete"
+														update="tabs:mainForm:projectTable"
+														>
+														<!-- <f:ajax execute="@form" render="@form" /> -->
+									</h:commandButton>
+								</h:column>
+							</h:dataTable>
 						</h:form>
 				    </div>
 				</p:tab>
 				<p:tab title="Add New Project"  rendered = "#{loggedInUser.role == 'admin'}">
-					<div class="flex flex-column mt-4">
+					<div class="flex flex-column">
 						<p:outputLabel rendered="#{loggedInUser.role != 'admin'}">
 							<h3>Sorry, only admin can add new project.</h3>
 						</p:outputLabel>
-			            <h:form id="projectForm" name="projectForm" class="p-4" style="width: fit-content;" rendered = "#{loggedInUser.role == 'admin'}" >
-							<div class="field p-grid mb-2 flex">
+			            <h:form id="projectForm" name="projectForm" class="px-4" style="width: fit-content;" rendered = "#{loggedInUser.role == 'admin'}" >
+			            	<h2>Add new project</h2>
+							<div class="field p-grid mt-2 mb-0 flex justify-content-between">
 							    <p:outputLabel for="title" class="p-col-fixed" style="width: 50%">
-									<h:outputText value="Enter title"></h:outputText>
+									<h:outputText value="Title"></h:outputText>
 								</p:outputLabel>
 							    <div class="p-col">
-							        <p:inputText id="title" value="#{projectBean.project.title}" type="text" required= "true" requiredMessage="title required"/>
+							        <p:inputText class="inputFieldANP" id="title" value="#{projectBean.project.title}" type="text" required= "true" requiredMessage="title required"/>
 							    </div>
 							</div>
-							<div class="field p-grid mb-2 flex">
+							<!-- <h:message for="title" class="mb-1" style="color: red"></h:message> -->
+							<div class="field p-grid mt-2 mb-0 flex justify-content-between">
 							    <p:outputLabel for="requirements" class="p-col-fixed" style="width: 50%">
-									<h:outputText value="Enter requirements"></h:outputText>
+									<h:outputText value="Requirements"></h:outputText>
 								</p:outputLabel>
 							    <div class="p-col">
-							        <p:inputText id="requirements" value="#{projectBean.project.requirements}" type="text" required= "true" requiredMessage="add requirements"/>
+							        <p:inputText class="inputFieldANP" id="requirements" value="#{projectBean.project.requirements}" type="text" required= "true" requiredMessage="add requirements"/>
 							    </div>
 							</div>
-							<div class="field p-grid mb-2 flex">
+							<!-- <h:message for="requirements" class="mb-1" style="color: red"></h:message> -->
+							<div class="field p-grid mt-2 mb-0 flex justify-content-between">
 							    <p:outputLabel for="status" class="p-col-fixed" style="width: 50%">
-									<h:outputText value="Enter status"></h:outputText>
+									<h:outputText value="Status"></h:outputText>
 								</p:outputLabel>
 							    <div class="p-col">
-							        <p:inputText id="status" value="#{projectBean.project.status}" type="text" required= "true" requiredMessage="status required"/>
+							        <p:inputText class="inputFieldANP" id="status" value="#{projectBean.project.status}" type="text" required= "true" requiredMessage="status required"/>
 							    </div>
 							</div>
-							<p:pickList id="pickList" value="#{userBean.dualListUser}" converter = "userConverter" var="user" itemLabel="#{user.userName}" itemValue="#{user}"/>
-							<h:commandButton value="Submit" action="#{projectBean.add}" disabled="#{loggedInUser.role == 'admin' ? 'false': 'true'}"></h:commandButton>
+							<!-- <h:message for="status" class="mb-1" style="color: red"></h:message> -->
+							<p:pickList class="mt-2" id="pickList" value="#{projectBean.dualListUser}" converter = "userConverter" var="user" itemLabel="#{user.userName}" itemValue="#{user}"/>
+							<h:commandButton class="submit-btn mt-3 px-4 py-2 text-white" value="Submit" action="#{projectBean.add}" disabled="#{loggedInUser.role == 'admin' ? 'false': 'true'}"></h:commandButton>
 						</h:form>
 					</div>
 				</p:tab>
 			</p:tabView>
+			<p:growl id="message"></p:growl>
         </h:body>
     </f:view>
 
